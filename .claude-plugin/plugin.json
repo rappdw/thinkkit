@@ -1,0 +1,11 @@
+{
+  "name": "thinkkit",
+  "version": "0.1.0",
+  "description": "Thinking tools for AI — structured exploration, strategic debate, CISO review, discovery scaffolding, and codebase mapping",
+  "author": {
+    "name": "rappdw",
+    "url": "https://github.com/rappdw"
+  },
+  "repository": "https://github.com/rappdw/thinkkit",
+  "license": "MIT"
+}

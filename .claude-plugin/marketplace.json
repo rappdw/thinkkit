@@ -1,0 +1,19 @@
+{
+  "name": "thinkkit",
+  "description": "Thinking tools for AI — structured exploration, strategic debate, CISO review, and more",
+  "owner": {
+    "name": "Dan Rapp",
+    "url": "https://github.com/rappdw"
+  },
+  "plugins": [
+    {
+      "name": "thinkkit",
+      "description": "Thinking tools for AI — structured exploration, strategic debate, CISO review, discovery scaffolding, and codebase mapping",
+      "source": "./",
+      "author": {
+        "name": "Dan Rapp",
+        "url": "https://github.com/rappdw"
+      }
+    }
+  ]
+}
