@@ -87,7 +87,7 @@ The script generates:
   glossary, per-module docs)
 - `wiki/site/index.html` — Self-contained browsable site (dark theme, search, Mermaid diagrams)
 
-### 3. Enrich
+### 4. Enrich
 
 This is the critical step. The script produces structure — file listings, function signatures,
 import graphs. You provide understanding.
@@ -121,7 +121,7 @@ After enriching the markdown files, regenerate the HTML site to pick up your cha
 python ${CLAUDE_PLUGIN_ROOT}/skills/map-the-repo/scripts/map.py --repo-path . --output-path ./wiki --rebuild-site
 ```
 
-### 4. Present
+### 5. Present
 
 Tell the user:
 - Where to open the site (`wiki/site/index.html`)

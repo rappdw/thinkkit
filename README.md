@@ -30,6 +30,9 @@ claude --plugin-dir /path/to/thinkkit
 | **Explore With Me** | `/thinkkit:explore-with-me` | You need to think through a problem, explore a topic in depth, or structure your thinking on any open-ended question |
 | **Init Discovery** | `/thinkkit:init-discovery` | You're starting a multi-session investigation and need a structured project scaffold |
 | **Map The Repo** | `/thinkkit:map-the-repo` | You want to document a codebase, generate a browsable wiki, or onboard someone to a project |
+| **Create Spec** | `/thinkkit:create-spec` | You need a single specification document complete enough to reconstruct a repo from scratch |
+| **Take Notes** | `/thinkkit:take-notes` | You're in a meeting and want to feed terse observations that get expanded into structured notes |
+| **Resolve Against Transcript** | `/thinkkit:resolve-against-transcript` | You have a meeting transcript and notes, and want to find and fix discrepancies between them |
 
 ## Production Tools
 
