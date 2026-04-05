@@ -33,6 +33,7 @@ claude --plugin-dir /path/to/thinkkit
 | **Create Spec** | `/thinkkit:create-spec` | You need a single specification document complete enough to reconstruct a repo from scratch |
 | **Take Notes** | `/thinkkit:take-notes` | You're in a meeting and want to feed terse observations that get expanded into structured notes |
 | **Resolve Against Transcript** | `/thinkkit:resolve-against-transcript` | You have a meeting transcript and notes, and want to find and fix discrepancies between them |
+| **Tutorial** | `/thinkkit:tutorial` | You're new to thinkkit and want a guided walkthrough of the skills and how they compose |
 
 ## Production Tools
 
