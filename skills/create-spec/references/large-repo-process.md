@@ -95,6 +95,7 @@ Create `SPECIFICATION/manifest.json` after the subsystem list is confirmed:
   "generated": "YYYY-MM-DD",
   "commit": "<short-hash>",
   "tier": "hierarchical-single-session",
+  "priority-order": ["billing", "auth", "ingestion"],
   "subsystems": [
     {
       "name": "billing",
@@ -119,6 +120,12 @@ Create `SPECIFICATION/manifest.json` after the subsystem list is confirmed:
 - `hierarchical-multi-session` — tier 4
 
 Update the manifest every time a subsystem's status changes.
+
+`priority-order` is optional for the default single-pick flow. It is
+required to enable the autonomous loop mode in Step 9.5; if absent when
+the user opts into the loop, the skill derives a candidate order
+(roughly: foundational / most-depended-on first) and asks the user to
+confirm or edit before entering the loop.
 
 ## Step 5: Root spec content (SPECIFICATION/index.md)
 
@@ -221,15 +228,155 @@ this flow instead of Phase 0.5:
    changes, mark the subsystem `stale` in the manifest.
 3. Show the user a numbered list of all non-`complete` subsystems with
    their current status (`pending`, `stale`, `in-progress`), and ask
-   which to work on this session. Do NOT auto-pick. If all subsystems
-   are `complete`, offer to refresh the root spec or exit cleanly.
+   which to work on this session. Do NOT auto-pick unless the user has
+   explicitly opted into loop mode (Step 9.5) — in that case, selection
+   is driven by `priority-order` and no prompt is shown. If all
+   subsystems are `complete`, offer to refresh the root spec or exit
+   cleanly.
 4. For the chosen subsystem, mark it `in-progress` and deep-spec it
    following Steps 5–8 of this document (scoped to that subsystem).
 5. After the pressure test converges, update the manifest: mark the
    subsystem `complete`, record the current commit in `last-spec-commit`,
    and update the root `generated` date.
 6. If the user wants to do another subsystem in the same session, return
-   to step 3. Otherwise, finalize (Step 10) and exit.
+   to step 3 — or, in loop mode, re-enter the Step 9.5 ritual for the
+   next `priority-order` entry without prompting. Otherwise, finalize
+   (Step 10) and exit.
+
+## Step 9.5: Autonomous Multi-Subsystem Loop (opt-in)
+
+By default, multi-session resume (Step 9) requires the user to pick one
+subsystem at a time. For users who want to power through the whole
+priority list in a single long-running session, this step defines an
+opt-in loop mode. It must never activate implicitly — the user has to
+ask.
+
+### Activation conditions
+
+All three must hold:
+
+1. A `SPECIFICATION/manifest.json` exists (loop mode only applies to
+   hierarchical specs that already exist).
+2. The user has explicitly opted in — e.g., passed `--loop` as the
+   skill argument, or said something like "do them all," "run the whole
+   list," "power through every subsystem," or "loop through the
+   priority order."
+3. The manifest contains a `priority-order` array (Step 4). If it does
+   not, derive a candidate order from the subsystem list, present it
+   to the user, and get explicit confirmation before entering the loop.
+
+If any of (1)–(3) is missing and cannot be resolved, fall back to Step
+9's default single-pick flow.
+
+### Per-subsystem ritual
+
+Every iteration performs the same atomic, idempotent ritual. Automatic
+context compaction may fire between iterations — or mid-iteration — so
+every step must be safe to re-enter from a fresh read of the manifest:
+
+1. **Re-read the manifest from disk.** Do not trust any in-conversation
+   memory of "what's next." The manifest on disk is the only source of
+   truth.
+2. **Select the next target.** Walk `priority-order` and pick the first
+   subsystem whose status is not `complete`. If an `in-progress` entry
+   exists, resume that one rather than starting a new one. If none
+   remain, exit the loop.
+3. **Emit the iteration header** (see "Progress messages" below).
+4. **Mark `in-progress`** in the manifest and update the session task
+   list.
+5. **Shard exploration.** Measure the subsystem. If it has >10 projects
+   OR >500 source files, split it into ≤3 concern groups (chosen by the
+   main session from the subsystem's layout — e.g., "ingestion
+   pipeline," "admin API," "shared models") and dispatch one
+   `Agent(subagent_type: Explore)` per group in a single response so
+   they run in parallel. Otherwise dispatch a single Explore agent.
+   Never exceed 3 parallel agents — the goal is bounded main-context
+   pressure, not maximum parallelism.
+6. **Synthesize the full 10-section spec** into
+   `SPECIFICATION/subsystems/<name>.md`, following Step 6's structure
+   and metadata header format.
+7. **Pressure test** per Step 8, scoped to this subsystem.
+8. **Finalize atomically.** In one burst of writes: flip the manifest
+   status to `complete`, stamp `last-spec-commit` with the current
+   short hash, update the subsystem row in `SPECIFICATION/index.md`'s
+   subsystem table, mark the task completed.
+9. **Emit the finalization message** (see below).
+10. **Advance.** Return to step 1 of this ritual. Do not ask the user.
+
+Because step 1 always re-reads the manifest, a compaction that drops
+conversation history mid-loop resumes correctly: the next iteration
+discovers the current `in-progress` subsystem and either completes it
+or (if finalize already landed) picks up the next `priority-order`
+entry.
+
+### Sharding heuristic (detail)
+
+Size measurement uses the same build-file + source-file counts as
+Phase 0.5 of SKILL.md, scoped to the subsystem's `path`:
+
+- ≤10 projects AND ≤500 source files → 1 Explore agent, whole subsystem
+- otherwise → 2 or 3 agents, sharded by concern group
+
+If a clean concern split isn't obvious, default to 2 agents: one
+covering public interfaces + entry points, one covering data models +
+internal algorithms.
+
+### Stop conditions
+
+Exit the loop cleanly when any of these fires:
+
+- **All done.** No `priority-order` entries remain non-`complete`.
+  Fall through to Step 10 (CLAUDE.md integration) and exit.
+- **User interrupt.** Any user message during the loop stops it.
+  Finish the current atomic step — do not abandon a half-written spec
+  or an inconsistent manifest — then stop and await instructions.
+- **Convergence failure.** A subsystem fails to converge in Step 8's
+  pressure test twice in a row (two full iterations with the gap list
+  not shrinking). Mark the subsystem `stale` with an added
+  `loop-blocked: true` flag in its manifest entry, print an escalation
+  line, and stop. Do not auto-advance past a failure.
+
+### Progress messages
+
+Before each iteration, emit a single-line header:
+
+```
+[3/16] billing — sharded into 2 Explore agents
+```
+
+Format: `[<index>/<total>] <slug> — sharded into <K> Explore agent(s)`
+where `<total>` is `len(priority-order)` and `<index>` is the 1-based
+position of the current subsystem within it.
+
+After finalization, emit:
+
+```
+[3/16] billing complete — SPECIFICATION/subsystems/billing.md written, manifest updated
+```
+
+On stop-condition exit, emit exactly one of:
+
+```
+Loop complete — all 16 subsystems finalized.
+Loop paused — user interrupt at [7/16] ingestion.
+Loop halted — [9/16] auth failed to converge after 2 pressure-test rounds; marked stale, loop-blocked.
+```
+
+### Guardrails
+
+Loop mode does not relax the base prompt's "careful actions" rules.
+Inside the loop:
+
+- **No git commits, no pushes, no tags, no force operations.** Even if
+  the user opted into the loop, they did not opt into shared-state
+  writes.
+- **File writes are restricted to `SPECIFICATION/`** (subsystem specs,
+  `index.md`, `manifest.json`) plus the session task list. Nothing
+  else in the repo.
+- **No destructive file operations** anywhere.
+
+If a ritual step appears to require any of the above, stop the loop
+and ask the user.
 
 ## Step 10: CLAUDE.md integration (large-repo variant)
 

@@ -17,7 +17,7 @@ description: >
   Note: this is different from map-the-repo, which generates a browsable
   wiki. This skill produces a reconstruction-grade specification.
 user-invocable: true
-argument-hint: "[output path, default: SPECIFICATION.md or SPECIFICATION/ for large repos]"
+argument-hint: "[output path | --loop to auto-run the whole priority list on an existing hierarchical spec]"
 allowed-tools: Read, Write, Bash, Glob, Grep, Agent
 ---
 
@@ -171,6 +171,14 @@ Check both possible layouts:
 **If a hierarchical spec is found**, load `references/large-repo-process.md`
 and follow its multi-session resume flow (Step 9). Do not fall through to
 Phase 0.5 — the tier has already been decided.
+
+If the user has also explicitly opted into autonomous loop mode — for
+example by passing `--loop` as the skill argument, or by saying "do them
+all," "run the whole priority list," "power through every subsystem," or
+similar — follow Step 9.5 of the reference instead of Step 9's default
+single-pick flow. Loop mode is never implicit: if the opt-in is at all
+ambiguous, ask before entering it, and never auto-advance on a fresh
+invocation without the user's words authorizing it this session.
 
 ### Phase 0.5: Scale Triage
 
