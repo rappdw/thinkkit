@@ -3,7 +3,6 @@ name: boardroom
 user-invocable: true
 argument-hint: [decision to debate]
 allowed-tools: Read, Write, Bash, Agent, WebSearch, WebFetch
-model: claude-opus-4-6
 description: >
   Strategic boardroom debate with AI advisors. Use this skill when the user wants to pressure-test
   a decision by having multiple AI-simulated business leaders debate it. Trigger on phrases like

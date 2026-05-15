@@ -3,7 +3,6 @@ name: ciso-review
 user-invocable: true
 argument-hint: [product or vendor]
 allowed-tools: Read, Write, WebSearch, WebFetch
-model: claude-opus-4-6
 description: >
   CISO-perspective security review for enterprise adoption decisions. Use this skill when the
   user wants to evaluate a vendor, product, SaaS tool, open-source dependency, API service,
