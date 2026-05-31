@@ -26,7 +26,7 @@ claude --plugin-dir /path/to/thinkkit
 
 Skills fall into distinct workflow patterns. When creating or modifying skills, match the appropriate pattern:
 
-**Multi-agent debate** (boardroom, ciso-review): Spawn parallel agents representing different perspectives, run multiple rounds, synthesize into deliverables (`.md` + `.html` + `.pdf`). These skills specify `model: claude-opus-4-6` and declare `Agent` in `allowed-tools`.
+**Multi-agent debate** (boardroom, council, ciso-review): Spawn parallel agents representing different perspectives, then synthesize. `boardroom` and `ciso-review` run multiple rounds into shareable deliverables (`.md` + `.html` + `.pdf`); `council` is the lightweight variant — parallel subagents produce independent first opinions, then anonymized peer review and chairman synthesis happen inline, delivered as an inline answer. These skills declare `Agent` in `allowed-tools` and inherit the session model (no `model:` pin).
 
 **Structured elicitation** (explore-with-me, init-discovery): Interview the user with focused questions before generating anything. The methodology files in `references/` define the interviewing approach. The key discipline is *not* generating analysis upfront — ask first, generate after.
 

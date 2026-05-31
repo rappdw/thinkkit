@@ -29,13 +29,13 @@ that. Keep the pace conversational.
 
 Open with a brief framing, then find out where to go:
 
-> Thinkkit is a collection of structured thinking tools. There are eight
+> Thinkkit is a collection of structured thinking tools. There are nine
 > skills organized into four patterns. Rather than walk through all of them,
 > let me point you at what's most useful for your situation.
 >
 > What brought you here?
 >
-> 1. I have a decision to make and want to pressure-test it
+> 1. I have a decision to make and want to pressure-test it (quick gut-check or formal debate)
 > 2. I'm evaluating a vendor, product, or my own security posture
 > 3. I need to work through a complex problem or explore a topic
 > 4. I need to document or understand a codebase
@@ -51,7 +51,7 @@ Skills in thinkkit fall into four patterns. Use these as your mental map:
 
 **Multi-agent debate** — Spawn several AI perspectives that argue with each
 other, then synthesize. For pressure-testing decisions and reviews.
-*Skills: `boardroom`, `ciso-review`*
+*Skills: `boardroom`, `council`, `ciso-review`*
 
 **Structured elicitation** — Interview the user with focused questions
 before generating anything. The discipline is asking first, writing after.
@@ -93,6 +93,33 @@ that emerged.
 
 **First-time setup:** The skill will interview you once to build your board
 of advisors (4-8 people whose thinking you respect). That config persists.
+
+---
+
+### council — Fast multi-angle gut-check
+
+**What it does:** Convenes a small council of advisors — each a distinct
+*thinking lens* rather than a named person — to answer one question. Several
+independent agents answer first, then critique each other's answers blind,
+then a chairman synthesizes a verdict with concrete next steps. It's a
+faithful adaptation of Andrej Karpathy's LLM Council.
+
+**When to reach for it:** You want other angles on something *right now*,
+without setup or ceremony. The lighter, faster cousin of boardroom — no
+advisor config, no deliverables, answer delivered inline.
+
+**Try this:**
+```
+/thinkkit:council should I rewrite this service in Go or keep patching the Python one?
+```
+
+**What you get:** An inline verdict — the call, the reasoning that survived
+peer review, where the council split, and a "Monday morning" list of next
+steps. Optionally saved to a `council-*.md` transcript if you want a record.
+
+**council vs. boardroom:** Use council for a fast informal read with thinking
+lenses; use boardroom for a formal debate with real-world advisors and
+shareable artifacts.
 
 ---
 
@@ -277,8 +304,8 @@ to browse; `create-spec` when you need a single reconstruction-grade
 document. They're complementary, not redundant.
 
 **Strategy workflow:** `explore-with-me` to surface the right framing →
-`boardroom` to pressure-test the decision → `ciso-review` if there's an
-adoption/security dimension.
+`council` for a fast multi-angle gut-check, or `boardroom` for a formal
+debate → `ciso-review` if there's an adoption/security dimension.
 
 ## Closing
 
