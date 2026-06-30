@@ -29,8 +29,8 @@ that. Keep the pace conversational.
 
 Open with a brief framing, then find out where to go:
 
-> Thinkkit is a collection of structured thinking tools. There are nine
-> skills organized into four patterns. Rather than walk through all of them,
+> Thinkkit is a collection of structured thinking tools. There are ten
+> skills organized into five patterns. Rather than walk through all of them,
 > let me point you at what's most useful for your situation.
 >
 > What brought you here?
@@ -40,10 +40,11 @@ Open with a brief framing, then find out where to go:
 > 3. I need to work through a complex problem or explore a topic
 > 4. I need to document or understand a codebase
 > 5. I'm about to go into a meeting and want help capturing it
-> 6. Just give me the full tour
+> 6. I need to draft a press release or announcement
+> 7. Just give me the full tour
 
 Based on their answer, go to the appropriate section below. If they pick
-"full tour," cover all four patterns in sequence with less depth per skill.
+"full tour," cover all five patterns in sequence with less depth per skill.
 
 ## The four patterns
 
@@ -63,6 +64,9 @@ generation with pressure-test loops.
 
 **Session-based capture** — Real-time or post-meeting note handling.
 *Skills: `take-notes`, `resolve-against-transcript`*
+
+**Guided drafting** — Turn a short brief into a structured deliverable,
+asking only for the gaps. *Skills: `press-release`*
 
 ## Skill-by-skill walkthroughs
 
@@ -287,6 +291,31 @@ accurate before distributing them.
 **What you get:** An interactive loop that shows you each discrepancy with
 the transcript excerpt, the current notes text, a proposed fix, and
 accept/modify/skip options. Plus a summary at the end.
+
+---
+
+### press-release — Draft an announcement from a one-line brief
+
+**What it does:** Turns a short description of what you're announcing into a
+complete, reporter-ready press release in a proven six-section structure
+(opener, third-party factoid, external quote, product details, company quote,
+availability). It's prompt-first: it pulls everything it can from your brief,
+asks only for the essentials it's still missing, then drafts — marking any
+assumptions, gaps, and unverified stats inline so you know exactly what to
+finish.
+
+**When to reach for it:** A product launch, customer win, funding round,
+partnership, or milestone you need to announce, and you want a strong first
+draft fast rather than staring at a blank page.
+
+**Try this:**
+```
+/thinkkit:press-release we're launching Northwind Threat Platform, the first tool to combine zero-day detection with automatic network isolation
+```
+
+**What you get:** A `press-release-*.md` draft shown inline, with `[ASSUMPTION]`
+/`[NEEDS INPUT]`/`[VERIFY]` markers for anything to confirm — plus an offer to
+convert it to PDF, Word, or HTML via the md2* skills.
 
 ## Compositions worth knowing
 

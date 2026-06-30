@@ -34,6 +34,8 @@ Skills fall into distinct workflow patterns. When creating or modifying skills, 
 
 **Session-based capture** (take-notes, resolve-against-transcript): Real-time interaction during or after meetings. `take-notes` expands terse input into notes files under `meeting-notes/`. `resolve-against-transcript` compares a transcript against notes and walks through discrepancies interactively.
 
+**Guided drafting** (press-release): Turn a short brief into a structured deliverable, asking only for the missing essentials rather than running a full interview. `press-release` mines the invoking prompt, fills gaps, and emits a six-section release defined by `references/template.md`, marking assumptions/gaps/unverified stats inline. The methodology lives in `references/` (a `worksheet.md` intake checklist and a `template.md` output structure).
+
 ## Skill Frontmatter
 
 Every SKILL.md requires YAML frontmatter with at minimum `name`, `description`, and `user-invocable: true`. The `description` field drives skill triggering — make it specific about when to trigger, and slightly "pushy" (Claude tends to undertrigger). Optional fields: `model`, `allowed-tools`, `argument-hint`.
