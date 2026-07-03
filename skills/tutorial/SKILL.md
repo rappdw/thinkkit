@@ -270,6 +270,11 @@ Then during the meeting, send messages like:
 updates in real time. Speaker attribution is opt-in via `name:` prefix —
 unattributed entries are captured as observations.
 
+**Recording with earshot?** If [earshot](https://github.com/rappdw/earshot)
+is capturing the meeting, take-notes pairs the notes with the recording
+(a `**Recording**:` pointer in the header) and, at wrap-up, points you at
+the transcription commands and the follow-on skills.
+
 ---
 
 ### resolve-against-transcript — Reconcile notes with recording
@@ -286,6 +291,11 @@ accurate before distributing them.
 **Try this:**
 ```
 /thinkkit:resolve-against-transcript recording.vtt meeting-notes/2026-04-05-q4-planning.md
+```
+or point it at an earshot capture directory (it finds the transcript and
+matching notes itself):
+```
+/thinkkit:resolve-against-transcript meeting-notes/2026-04-05_141530_q4-planning/
 ```
 
 **What you get:** An interactive loop that shows you each discrepancy with
@@ -323,6 +333,10 @@ The skills chain naturally. Point the user at these when relevant:
 
 **Meeting workflow:** `take-notes` during → `resolve-against-transcript`
 after. Take shorthand notes live, reconcile against the transcript later.
+With [earshot](https://github.com/rappdw/earshot) recording alongside, the
+full pipeline is: record + take notes live → `earshot transcribe/diarize` →
+`resolve-against-transcript` to correct the notes → earshot's
+`/meeting-narrative` to synthesize a readable brief.
 
 **Discovery workflow:** `explore-with-me` for quick explorations →
 `init-discovery` when a single session won't cut it → use the resulting

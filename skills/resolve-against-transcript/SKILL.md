@@ -9,7 +9,9 @@ description: >
   "verify meeting notes", "reconcile notes with transcript", or has both a
   transcript and notes file and wants to ensure accuracy. Also trigger when
   the user mentions checking `[unverified]` tags or validating speaker
-  attribution against a transcript.
+  attribution against a transcript, or points at an earshot meeting directory
+  (a folder with meeting.json/transcript.md) and wants their notes checked
+  against it.
 user-invocable: true
 argument-hint: "<transcript-file> [notes-file]"
 allowed-tools: Read, Write, Glob
@@ -32,13 +34,29 @@ notes diverge from what was actually said.
 ## Invocation
 
 Accept two arguments:
-1. A transcript file path (.txt, .md, .vtt, .srt, or similar)
+1. A transcript file path (.txt, .md, .vtt, .srt, or similar) — **or an
+   [earshot](https://github.com/rappdw/earshot) capture directory** (identified
+   by a `meeting.json` file inside it). For a capture directory, use its
+   `transcript.md` as the transcript; consult `transcript.json` when segment
+   timing or speaker/channel detail matters (`channel: near` is the note-taker,
+   `far` is everyone else).
 2. A meeting notes file path (typically from `meeting-notes/`)
 
-**If either is missing**, prompt for it. If only one file is provided and a
-`meeting-notes/` directory exists, attempt to match by date or title slug.
-For example, if the transcript is named `2025-03-28-api-review.vtt`, look
-for `meeting-notes/2025-03-28-api-review.md` or similar.
+**If either is missing**, prompt for it — but try to resolve the pair yourself
+first, in this order:
+
+1. **The `**Recording**:` pointer.** Notes taken with `/thinkkit:take-notes`
+   alongside an earshot recording carry a `**Recording**: <capture-dir>` line
+   in their header. Given the notes, follow the pointer to the transcript;
+   given an earshot directory, grep `meeting-notes/*.md` for a pointer to it.
+   A pointer match is definitive.
+2. **Name matching.** Match by date and title slug. take-notes files are named
+   `YYYY-MM-DD-<slug>.md`; earshot capture directories are named
+   `YYYY-MM-DD_HHMMSS[_<slug>]/` (same date and slug, plus a time component).
+   For example, `2025-03-28-api-review.vtt` or `2025-03-28_141530_api-review/`
+   both pair with `meeting-notes/2025-03-28-api-review.md`.
+
+If neither resolves it unambiguously, ask.
 
 ## Step 1: Read and understand both files
 
@@ -146,6 +164,14 @@ Transcripts come in various formats. Handle at least:
 - **VTT / SRT**: Timestamped subtitle format with optional speaker labels.
   Parse timestamps but don't include them in the output unless relevant
   to a discrepancy
+- **earshot transcripts** (`transcript.md` in a capture directory): lines of
+  the form `**[MM:SS] SPEAKER:** text`. Speaker labels are `YOU` (the
+  note-taker — treat statements labeled `YOU` as the user's own), real names
+  (attributed via earshot's voice library), or `REMOTE-N` (diarized but not
+  yet named). Timestamps are Whisper output; treat as approximate. If
+  unresolved `REMOTE-N` labels block an attribution check, don't guess —
+  flag it and suggest running `earshot attribute <dir>` to name the speakers
+  by ear, then re-running this skill
 - **Raw transcription**: May lack speaker labels entirely. Do your best to
   infer speakers from context, but flag low-confidence attributions
 

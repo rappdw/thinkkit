@@ -32,7 +32,7 @@ Skills fall into distinct workflow patterns. When creating or modifying skills, 
 
 **Iterative analysis** (create-spec, map-the-repo): Deep codebase exploration followed by document generation with pressure-test loops. `map-the-repo` uses a Python script for static analysis; `create-spec` works purely through Claude's tools.
 
-**Session-based capture** (take-notes, resolve-against-transcript): Real-time interaction during or after meetings. `take-notes` expands terse input into notes files under `meeting-notes/`. `resolve-against-transcript` compares a transcript against notes and walks through discrepancies interactively.
+**Session-based capture** (take-notes, resolve-against-transcript): Real-time interaction during or after meetings. `take-notes` expands terse input into notes files under `meeting-notes/`. `resolve-against-transcript` compares a transcript against notes and walks through discrepancies interactively. Both are conditionally earshot-aware — integration activates only when earshot artifacts are detected (see Meeting-Artifacts Contract below).
 
 **Guided drafting** (press-release): Turn a short brief into a structured deliverable, asking only for the missing essentials rather than running a full interview. `press-release` mines the invoking prompt, fills gaps, and emits a six-section release defined by `references/template.md`, marking assumptions/gaps/unverified stats inline. The methodology lives in `references/` (a `worksheet.md` intake checklist and a `template.md` output structure).
 
@@ -43,3 +43,16 @@ Every SKILL.md requires YAML frontmatter with at minimum `name`, `description`, 
 ## Composability
 
 Some skills chain naturally: `take-notes` produces files that `resolve-against-transcript` consumes. `explore-with-me` feeds into `init-discovery` for multi-session projects. When modifying these skills, preserve the file format conventions that enable this chaining (e.g., `meeting-notes/YYYY-MM-DD-<slug>.md` naming, `name: note` speaker attribution format).
+
+## Meeting-Artifacts Contract (external consumers)
+
+The meeting skills have consumers **outside this repo** — treat their file formats and naming as a public contract; changes are breaking beyond thinkkit:
+
+- **[earshot](https://github.com/rappdw/earshot)** (`meeting-narrative` skill) reads take-notes files and documents their structure (header with Date/Attendees/Purpose, `## Notes` with `**Name**:` attribution, `## Action Items`, `## Open Questions`).
+- **[pka-skills](https://github.com/rappdw/pka-skills)** (`pka-meetings`) orchestrates `take-notes` and `resolve-against-transcript`, then routes/indexes their output. It may **move** notes files out of `meeting-notes/` after processing.
+
+Contract details both meeting skills rely on:
+
+- take-notes files: `meeting-notes/YYYY-MM-DD-<slug>.md`.
+- earshot capture directories: `YYYY-MM-DD_HHMMSS[_<slug>]/`, identified by a `meeting.json` marker file (location configurable; commonly under `meeting-notes/`). Contain `transcript.json` (ground truth; `channel: near` = note-taker), `transcript.md` (lines of `**[MM:SS] SPEAKER:** text`; speakers `YOU`, real names, or `REMOTE-N`), machine `notes.md`, and `narrative.md`.
+- Pairing: a `**Recording**: <capture-dir>` line in the notes header. The pointer lives in the notes file and points at the directory (never the reverse) because notes may be moved by routing while capture directories stay put. Fallback matching is by shared date + title slug.

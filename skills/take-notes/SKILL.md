@@ -33,8 +33,52 @@ When invoked, gather the basics before creating the file:
 
 Before the first note entry, scan `meeting-notes/` for prior notes. Skim
 recent ones for context on ongoing threads, recurring attendees, and open
-items from previous meetings. This background context helps you expand terse
-input more accurately.
+items from previous meetings. If earshot capture directories are present
+(see Recording awareness below), also skim their `narrative.md` files —
+prior meeting narratives are the richest available context. This background
+context helps you expand terse input more accurately.
+
+## Recording awareness (earshot)
+
+The user may be recording the meeting with [earshot](https://github.com/rappdw/earshot),
+a fully local capture/transcription/diarization pipeline. A paired recording
+unlocks two downstream steps after the meeting: correcting these notes against
+the machine transcript (`/thinkkit:resolve-against-transcript`) and synthesizing
+notes + transcript into a readable brief (earshot's `/meeting-narrative` skill).
+
+Everything in this section is conditional. If earshot isn't present, skip it
+silently; take-notes behaves exactly as it always has.
+
+**Detecting earshot.** Detect by marker, not by path or name:
+
+- A directory containing a `meeting.json` file is an earshot capture directory.
+  earshot writes `YYYY-MM-DD_HHMMSS[_title]/` directories holding `meeting.json`,
+  WAV audio, and, after processing, `transcript.json`, `transcript.md`,
+  `notes.md`, and `narrative.md`. Users often configure earshot's output root
+  to be the workspace `meeting-notes/` directory, but the location is
+  configurable — the `meeting.json` marker identifies a capture, not the path.
+  Glob `meeting-notes/*/meeting.json` first; it's the common layout.
+- If `~/.config/earshot/earshot.conf` exists, earshot is installed on this
+  machine even when no capture directories exist yet.
+
+**At session start:**
+
+- Look for a capture directory dated today whose title resembles this meeting's.
+  If one exists (or the user confirms a candidate), pair with it by adding a
+  `**Recording**:` line to the notes header (see Document structure).
+- If earshot is installed but nothing is recording this meeting, remind the
+  user once, in one line: they can run `earshot rec -t "<meeting title>"` in a
+  terminal, and using the same title makes the pairing unambiguous. Never start
+  `earshot rec` yourself — it is an interactive, long-running process the user
+  owns. If they decline or ignore the reminder, drop the subject.
+
+**At wrap-up**, check again for a matching capture directory — it appears when
+the recording started, which may be after you created the notes file. Add or
+update the `**Recording**:` pointer if you find one.
+
+The pointer always lives in the notes file and points at the capture directory,
+never the reverse: other tools (e.g. a PKA workspace's routing) may later move
+notes files, while capture directories stay put.
 
 ## Expanding terse input
 
@@ -108,6 +152,8 @@ Maintain this structure in the notes file, updating it throughout the session:
 **Date**: YYYY-MM-DD
 **Attendees**: Name (Role), Name (Role), ...
 **Purpose**: One-line description
+**Recording**: meeting-notes/YYYY-MM-DD_HHMMSS_<title>/   <- only when paired
+                                                             with an earshot capture
 
 ## Notes
 
@@ -140,9 +186,22 @@ or "wrap up":
 1. Do a final pass on the notes file: clean up any rough entries, ensure
    action items are complete and attributed, check that open questions
    make sense in isolation
-2. Write the final version to disk
-3. Give the user a brief summary: how many notes, action items, and open
+2. Re-check for an earshot capture directory and update the `**Recording**:`
+   pointer (see Recording awareness)
+3. Write the final version to disk
+4. Give the user a brief summary: how many notes, action items, and open
    questions were captured, and the file path
+5. If the notes are paired with an earshot capture, point at the next steps:
+   - Transcript already present (`transcript.md`/`transcript.json` in the
+     capture directory): offer `/thinkkit:resolve-against-transcript <capture-dir>
+     <notes-file>` to correct these notes against what was actually said, and
+     `/meeting-narrative <capture-dir>` (earshot's skill, if installed) to
+     synthesize the transcript and these notes into a readable brief.
+   - Audio only, no transcript yet: give the user the exact commands —
+     `earshot transcribe <dir> && earshot diarize <dir>` locally, or
+     `earshot offload <dir>` for a GPU box, plus `earshot attribute <dir>` if
+     unnamed speakers matter — then mention the two skills above for afterward.
+   - Keep this to a few lines. It's a signpost, not a tutorial.
 
 ## Writing style
 
