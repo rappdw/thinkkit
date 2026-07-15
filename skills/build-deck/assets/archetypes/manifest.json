@@ -1,0 +1,21 @@
+{
+  "title": "Your Talk Title — audience window",
+  "presenterTitle": "PRESENTER CONSOLE — do not share",
+  "distTitle": "Your Talk Title",
+  "distName": "your-talk-slides.html",
+  "channel": "my-deck",
+  "script": "script.md",
+  "noVerbatim": ["qa"],
+  "budgetTarget": 14,
+  "order": ["title", "chart", "table", "ladder", "timeline", "closing", "qa"],
+  "appendix": "apx",
+  "slides": {
+    "title":    { "steps": 2, "budget": 1, "title": "Cold open" },
+    "chart":    { "steps": 3, "budget": 3, "title": "The spectrum" },
+    "table":    { "steps": 3, "budget": 3, "title": "The fit test" },
+    "ladder":   { "steps": 2, "budget": 2, "title": "The ladder" },
+    "timeline": { "steps": 4, "budget": 3, "title": "The arc" },
+    "closing":  { "steps": 2, "budget": 2, "title": "What it takes" },
+    "qa":       { "steps": 1, "budget": 0, "title": "Q&A" }
+  }
+}

@@ -1,0 +1,44 @@
+<!-- ARCHETYPE: ladder. A staged vertical ladder (each rung earns the next). data-steps="2".
+     (1) all rungs; (2) the "you are here" marker. Good for maturity/autonomy/adoption stages. -->
+<section class="slide" data-slide="ladder" data-steps="2">
+  <h1 style="margin-bottom:2.5%;">A ladder, <span class="dim">not a switch</span></h1>
+
+  <div class="ld-stack">
+    <div class="ld-rung ld-3" data-step="1">
+      <div class="ld-role">RUNG THREE</div>
+      <div class="ld-title">Unattended &mdash; it runs, you audit</div>
+      <div class="ld-body">Earned only after the rung below has a track record. Reversible, bounded, logged.</div>
+      <span class="ld-here" data-step="2">most teams are not here yet</span>
+    </div>
+    <div class="ld-conn" data-step="1">&#9650;</div>
+    <div class="ld-rung ld-2" data-step="1">
+      <div class="ld-role">RUNG TWO</div>
+      <div class="ld-title">On the loop &mdash; it acts, you supervise</div>
+      <div class="ld-body">Human watches a stream of actions and can intervene; approval moved to the playbook.</div>
+      <span class="ld-here ld-here-on" data-step="2">most real deployments live here</span>
+    </div>
+    <div class="ld-conn" data-step="1">&#9650;</div>
+    <div class="ld-rung ld-1" data-step="1">
+      <div class="ld-role">RUNG ONE</div>
+      <div class="ld-title">In the loop &mdash; it proposes, you decide</div>
+      <div class="ld-body">Every action waits for a human. Slow, safe, the place to start.</div>
+    </div>
+  </div>
+
+  <style>
+    [data-slide="ladder"] .ld-stack { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 1%; }
+    [data-slide="ladder"] .ld-conn { text-align: center; color: var(--text-faint); font-size: clamp(13px, 1.2vw, 18px); line-height: 1; }
+    [data-slide="ladder"] .ld-rung { position: relative; background: var(--panel-2); border-radius: var(--radius); padding: 1.6% 2.4%; border-left: 4px solid var(--line); }
+    [data-slide="ladder"] .ld-1 { border-left-color: var(--blue); }
+    [data-slide="ladder"] .ld-2 { border-left-color: var(--amber); }
+    [data-slide="ladder"] .ld-3 { border-left-color: var(--green); }
+    [data-slide="ladder"] .ld-role { text-transform: uppercase; letter-spacing: .1em; font-size: clamp(13px, 1.2vw, 18px); color: var(--text-faint); }
+    [data-slide="ladder"] .ld-title { font-weight: 700; font-size: clamp(20px, 2vw, 32px); color: var(--text); margin: .15em 0; }
+    [data-slide="ladder"] .ld-body { color: var(--text-dim); font-size: clamp(15px, 1.5vw, 23px); line-height: 1.3; }
+    [data-slide="ladder"] .ld-here {
+      position: absolute; top: -12px; right: 16px; border: 1.5px dashed var(--text-faint); background: var(--bg);
+      color: var(--text-dim); border-radius: 20px; padding: 2px 12px; font-size: clamp(13px, 1.2vw, 18px);
+    }
+    [data-slide="ladder"] .ld-here-on { border-color: var(--amber); color: var(--amber-lt); }
+  </style>
+</section>

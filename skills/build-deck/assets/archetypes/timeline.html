@@ -1,0 +1,47 @@
+<!-- ARCHETYPE: timeline. Four phase cards over a left-to-right axis, with a payoff bracket.
+     data-steps="4": one card per step, the axis + bracket land on the last. Good for a case-study arc. -->
+<section class="slide" data-slide="timeline" data-steps="4">
+  <div class="tl-head">
+    <h1>The arc</h1>
+    <div class="tl-kicker">START &rarr; PAYOFF</div>
+  </div>
+
+  <div class="tl-cards">
+    <div class="tl-col" data-step="1" style="--pc:var(--cyan);">
+      <div class="tl-card"><div class="tl-label">Phase one</div><div class="tl-body">Where it began &mdash; the problem in one plain sentence.</div></div>
+    </div>
+    <div class="tl-col" data-step="2" style="--pc:var(--blue);">
+      <div class="tl-card"><div class="tl-label">Phase two</div><div class="tl-body">The turn &mdash; what you tried and what shifted.</div></div>
+    </div>
+    <div class="tl-col" data-step="3" style="--pc:var(--purple);">
+      <div class="tl-card"><div class="tl-label">Phase three</div><div class="tl-body">The work &mdash; the part the audience will not believe until you show it.</div></div>
+    </div>
+    <div class="tl-col" data-step="4" style="--pc:var(--amber);">
+      <div class="tl-card"><div class="tl-label">Phase four</div><div class="tl-stat">the number</div><div class="tl-sub">that makes it real</div></div>
+    </div>
+  </div>
+
+  <div class="tl-axis">
+    <div class="tl-axis-line"></div>
+    <div class="tl-ep" style="left:0;"><span class="tl-ep-day" style="color:var(--blue-lt);">Start</span></div>
+    <div class="tl-ep" style="left:100%; transform:translateX(-100%); text-align:right;"><span class="tl-ep-day" style="color:var(--green-lt);">Payoff</span></div>
+  </div>
+
+  <div class="tl-bracket" data-step="4">The moment the work changed hands &mdash; that is the real result.</div>
+
+  <style>
+    [data-slide="timeline"] .tl-head { display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:2.6%; }
+    [data-slide="timeline"] .tl-kicker { text-transform:uppercase; letter-spacing:.06em; font-size:clamp(16px,1.5vw,24px); color:var(--text-dim); }
+    [data-slide="timeline"] .tl-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:2%; }
+    [data-slide="timeline"] .tl-card { background:var(--panel-2); border:1px solid var(--line); border-top:3px solid var(--pc); border-radius:var(--radius); padding:clamp(14px,1.6vw,22px) clamp(16px,1.8vw,26px); height:100%; }
+    [data-slide="timeline"] .tl-label { text-transform:uppercase; letter-spacing:.08em; font-size:clamp(15px,1.3vw,20px); font-weight:700; color:var(--pc); margin-bottom:.4em; filter:brightness(1.25); }
+    [data-slide="timeline"] .tl-body { font-size:clamp(17px,1.7vw,27px); line-height:1.35; color:var(--text); }
+    [data-slide="timeline"] .tl-stat { font-size:clamp(24px,2.6vw,42px); font-weight:700; color:var(--amber-lt); }
+    [data-slide="timeline"] .tl-sub { color:var(--text-dim); font-size:clamp(16px,1.6vw,26px); }
+    [data-slide="timeline"] .tl-axis { position:relative; height:clamp(40px,4vw,56px); margin-top:2.4%; }
+    [data-slide="timeline"] .tl-axis-line { position:absolute; left:0; right:0; top:8px; height:2px; border-radius:2px; background:linear-gradient(90deg, var(--blue), var(--green)); }
+    [data-slide="timeline"] .tl-ep { position:absolute; top:20px; font-size:clamp(14px,1.3vw,20px); }
+    [data-slide="timeline"] .tl-ep-day { text-transform:uppercase; letter-spacing:.12em; font-weight:600; }
+    [data-slide="timeline"] .tl-bracket { margin-top:2%; border:2px solid var(--green); background:rgba(34,197,94,.08); border-radius:var(--radius); padding:1% 2.4%; text-align:center; color:var(--green-lt); font-weight:700; font-size:clamp(17px,1.7vw,28px); }
+  </style>
+</section>

@@ -1,0 +1,36 @@
+/* ── Design tokens — sibling of owasp-agentic-threat-surface.html ── */
+:root {
+  --bg:        #0b1120;
+  --panel:     #1e293b;
+  --panel-2:   rgba(30, 41, 59, .7);
+  --text:      #e2e8f0;
+  --text-dim:  #94a3b8;
+  --text-faint:#64748b;
+  --blue:      #3b82f6;  --blue-lt:   #93c5fd;
+  --green:     #22c55e;  --green-lt:  #86efac;
+  --purple:    #a855f7;  --purple-lt: #c4b5fd;
+  --amber:     #f59e0b;  --amber-lt:  #fcd34d;
+  --red:       #ef4444;  --red-lt:    #fca5a5;
+  --cyan:      #0ea5e9;  --cyan-lt:   #7dd3fc;
+  --line:      rgba(148, 163, 184, .25);
+  --radius:    12px;
+  --step-ms:   360ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  height: 100%;
+}
+/* step reveal primitive: anything with data-step starts hidden, .on shows it */
+[data-step] {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--step-ms) ease-out, transform var(--step-ms) ease-out;
+}
+[data-step].on { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-step] { transition: none; transform: none; }
+  * { animation: none !important; }
+}

@@ -1,0 +1,62 @@
+<!-- ARCHETYPE: table. A live-scored fit test. data-steps="3": (1) criteria, (2) score A, (3) score B.
+     Candidate B deliberately fails one row so the test has teeth. Swap criteria for your domain's. -->
+<section class="slide" data-slide="table" data-steps="3">
+  <h1 style="margin-bottom:1.5%;">The fit test <span class="dim">&mdash; four questions</span></h1>
+
+  <div class="ft-grid">
+    <div class="ft-cell"></div>
+    <div class="ft-cell ft-head" data-step="2"><span class="ft-pill ft-blue">Candidate A</span></div>
+    <div class="ft-cell ft-head" data-step="3"><span class="ft-pill ft-purple">Candidate B</span></div>
+
+    <div class="ft-cell ft-crit ft-line" data-step="1"><div class="ft-name">High toil</div><div class="ft-gloss">people repeat the same manual work</div></div>
+    <div class="ft-cell ft-line ft-check" data-step="2"><span class="ft-badge yes">&check;</span></div>
+    <div class="ft-cell ft-line ft-check" data-step="3"><span class="ft-badge yes">&check;</span></div>
+
+    <div class="ft-cell ft-crit ft-line" data-step="1"><div class="ft-name">Clear success criteria</div><div class="ft-gloss">you can say what "good" is</div></div>
+    <div class="ft-cell ft-line ft-check" data-step="2"><span class="ft-badge yes">&check;</span></div>
+    <div class="ft-cell ft-line ft-check" data-step="3"><span class="ft-badge yes">&check;</span></div>
+
+    <div class="ft-cell ft-crit ft-line" data-step="1"><div class="ft-name">Speed matters</div><div class="ft-gloss">a real cost to waiting</div></div>
+    <div class="ft-cell ft-line ft-check" data-step="2"><span class="ft-badge yes">&check;</span></div>
+    <div class="ft-cell ft-line ft-check" data-step="3"><span class="ft-badge yes">&check;</span></div>
+
+    <div class="ft-cell ft-crit ft-line" data-step="1"><div class="ft-name">Spiky volume</div><div class="ft-gloss">the workload surges and idles</div></div>
+    <div class="ft-cell ft-line ft-check" data-step="2"><span class="ft-badge yes">&check;</span></div>
+    <div class="ft-cell ft-line ft-check" data-step="3"><span class="ft-badge no">&mdash;</span></div>
+
+    <div class="ft-cell"></div>
+    <div class="ft-cell ft-total" data-step="2"><span class="ft-pill ft-green">4 / 4</span></div>
+    <div class="ft-cell ft-total" data-step="3"><span class="ft-pill ft-purple">3 / 4</span></div>
+  </div>
+
+  <div class="ft-foot" data-step="1">Swap these for your domain's criteria &mdash; keep it to four or five you can score out loud.</div>
+
+  <style>
+    [data-slide="table"] .ft-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-rows: auto repeat(4, minmax(0, 1fr)) auto;
+      column-gap: 2%;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    [data-slide="table"] .ft-line { border-top: 1px solid var(--line); }
+    [data-slide="table"] .ft-crit { display: flex; flex-direction: column; justify-content: center; gap: .3em; }
+    [data-slide="table"] .ft-name { font-weight: 700; font-size: clamp(19px, 1.9vw, 31px); color: var(--text); }
+    [data-slide="table"] .ft-gloss { color: var(--text-dim); font-size: clamp(15px, 1.5vw, 23px); }
+    [data-slide="table"] .ft-head, [data-slide="table"] .ft-check, [data-slide="table"] .ft-total {
+      display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    [data-slide="table"] .ft-pill { display: inline-block; padding: .35em .9em; font-weight: 700; font-size: clamp(17px, 1.6vw, 26px); border-radius: 999px; }
+    [data-slide="table"] .ft-blue { color: var(--blue-lt); background: rgba(59,130,246,.12); border: 1.5px solid rgba(59,130,246,.4); }
+    [data-slide="table"] .ft-purple { color: var(--purple-lt); background: rgba(168,85,247,.12); border: 1.5px solid rgba(168,85,247,.4); }
+    [data-slide="table"] .ft-green { color: var(--green-lt); background: rgba(34,197,94,.12); border: 1.5px solid rgba(34,197,94,.5); }
+    [data-slide="table"] .ft-badge {
+      width: clamp(32px, 2.3vw, 46px); height: clamp(32px, 2.3vw, 46px); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(16px, 1.5vw, 23px);
+    }
+    [data-slide="table"] .ft-badge.yes { background: rgba(34,197,94,.12); border: 1.5px solid rgba(34,197,94,.5); color: var(--green-lt); }
+    [data-slide="table"] .ft-badge.no { background: transparent; border: 1.5px solid var(--line); color: var(--text-faint); }
+    [data-slide="table"] .ft-foot { margin-top: 1.6%; flex: 0 0 auto; color: var(--text-dim); font-size: clamp(16px, 1.6vw, 25px); }
+  </style>
+</section>
