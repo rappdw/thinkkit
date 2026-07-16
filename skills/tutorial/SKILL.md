@@ -29,7 +29,7 @@ that. Keep the pace conversational.
 
 Open with a brief framing, then find out where to go:
 
-> Thinkkit is a collection of structured thinking tools. There are ten
+> Thinkkit is a collection of structured thinking tools. There are thirteen
 > skills organized into five patterns. Rather than walk through all of them,
 > let me point you at what's most useful for your situation.
 >
@@ -38,17 +38,18 @@ Open with a brief framing, then find out where to go:
 > 1. I have a decision to make and want to pressure-test it (quick gut-check or formal debate)
 > 2. I'm evaluating a vendor, product, or my own security posture
 > 3. I need to work through a complex problem or explore a topic
-> 4. I need to document or understand a codebase
-> 5. I'm about to go into a meeting and want help capturing it
-> 6. I need to draft a press release or announcement
-> 7. Just give me the full tour
+> 4. I want to deeply learn a topic or concept
+> 5. I need to document or understand a codebase
+> 6. I'm about to go into a meeting and want help capturing it
+> 7. I need to draft a press release, announcement, or presentation deck
+> 8. Just give me the full tour
 
 Based on their answer, go to the appropriate section below. If they pick
 "full tour," cover all five patterns in sequence with less depth per skill.
 
-## The four patterns
+## The five patterns
 
-Skills in thinkkit fall into four patterns. Use these as your mental map:
+Skills in thinkkit fall into five patterns. Use these as your mental map:
 
 **Multi-agent debate** — Spawn several AI perspectives that argue with each
 other, then synthesize. For pressure-testing decisions and reviews.
@@ -56,7 +57,9 @@ other, then synthesize. For pressure-testing decisions and reviews.
 
 **Structured elicitation** — Interview the user with focused questions
 before generating anything. The discipline is asking first, writing after.
-*Skills: `explore-with-me`, `init-discovery`*
+`learn-with-me` inverts the direction: Claude holds the knowledge and the
+user builds understanding through teach-back rounds.
+*Skills: `explore-with-me`, `init-discovery`, `learn-with-me`*
 
 **Iterative analysis** — Deep code exploration followed by document
 generation with pressure-test loops.
@@ -66,7 +69,7 @@ generation with pressure-test loops.
 *Skills: `take-notes`, `resolve-against-transcript`*
 
 **Guided drafting** — Turn a short brief into a structured deliverable,
-asking only for the gaps. *Skills: `press-release`*
+asking only for the gaps. *Skills: `press-release`, `build-deck`*
 
 ## Skill-by-skill walkthroughs
 
@@ -173,6 +176,31 @@ generation would be worse than discovering the right framing first.
 
 **What you get:** After 5-15 rounds of interviewing, a markdown file
 capturing context, key findings, constraints, tensions, and recommendations.
+
+---
+
+### learn-with-me — Feynman-style tutoring loop
+
+**What it does:** The mirror image of explore-with-me: Claude holds the
+knowledge and you build understanding. Short explanation, then *you* explain
+it back in your own words; Claude diagnoses exactly where your version goes
+fuzzy or wrong, refines just those gaps from a new angle, and repeats until
+your explanation survives challenge. When your code uses the concept, the
+examples come from your own repo.
+
+**When to reach for it:** You want to actually understand something — a
+protocol, an algorithm, a pattern, a domain concept — not just read an
+explanation that feels clear and evaporates by Friday.
+
+**Try this:**
+```
+/thinkkit:learn-with-me how does Raft leader election actually work
+```
+
+**What you get:** A working understanding you've demonstrated by teaching it
+back, plus an optional saved "teaching snapshot" in `learning-log/` — the
+idea in one sentence, the analogy that worked (with its limits), the
+mechanism, and a self-test for six-months-later you.
 
 ---
 
@@ -327,6 +355,29 @@ draft fast rather than staring at a blank page.
 /`[NEEDS INPUT]`/`[VERIFY]` markers for anything to confirm — plus an offer to
 convert it to PDF, Word, or HTML via the md2* skills.
 
+---
+
+### build-deck — Two-window presentation with presenter console
+
+**What it does:** Builds a presentation as two synced, self-contained HTML
+files: an audience window (clean visuals, shared on screen) and a private
+presenter console (verbatim talk track, pacing clock, next-slide preview,
+Q&A prep). The talk script is the source of truth — automated QA fails the
+build if presenter notes drift from it. Also produces a stripped host copy
+safe to send to whoever asks for your slides.
+
+**When to reach for it:** A conference talk, team briefing, or lightning
+talk where you want real presenter support without PowerPoint/Keynote —
+everything runs from `file://` with zero network requests.
+
+**Try this:**
+```
+/thinkkit:build-deck lessons from migrating our auth stack
+```
+
+**What you get:** `slides.html` + `presenter.html` (kept in lock-step
+across two browser windows) plus a shareable host copy.
+
 ## Compositions worth knowing
 
 The skills chain naturally. Point the user at these when relevant:
@@ -349,6 +400,11 @@ document. They're complementary, not redundant.
 **Strategy workflow:** `explore-with-me` to surface the right framing →
 `council` for a fast multi-angle gut-check, or `boardroom` for a formal
 debate → `ciso-review` if there's an adoption/security dimension.
+
+**Learning workflow:** `map-the-repo` to survey an unfamiliar codebase →
+`learn-with-me` to deeply understand the concepts it uses. Or standalone:
+`learn-with-me` when you catch yourself nodding along to something you
+couldn't actually explain.
 
 ## Closing
 

@@ -11,7 +11,7 @@ Thinkkit is a Claude Code plugin that packages structured thinking methodologies
 - `.claude-plugin/` — Plugin manifest (`plugin.json`) and marketplace registry (`marketplace.json`)
 - `skills/<name>/SKILL.md` — Each skill's complete definition (frontmatter + instructions)
 - `skills/<name>/references/` — Supporting methodology docs loaded on demand
-- `skills/<name>/scripts/` — Executable code (only `map-the-repo/scripts/map.py` currently)
+- `skills/<name>/scripts/` or `assets/` — Executable code and templates (`map-the-repo/scripts/map.py`; `build-deck/assets/engine/` with `build.py`/`dist.py`/`qa.py` and slide archetypes)
 
 ## Development
 
@@ -20,7 +20,7 @@ Thinkkit is a Claude Code plugin that packages structured thinking methodologies
 claude --plugin-dir /path/to/thinkkit
 ```
 
-**map.py** is the only executable code — Python stdlib only (ast, argparse, json, re, pathlib, dataclasses). No external dependencies.
+Executable code is limited to `map-the-repo/scripts/map.py` and `build-deck/assets/engine/` (`build.py`, `dist.py`, `qa.py`) — Python stdlib only, no external dependencies.
 
 ## Skill Architecture Patterns
 
@@ -28,7 +28,7 @@ Skills fall into distinct workflow patterns. When creating or modifying skills, 
 
 **Multi-agent debate** (boardroom, council, ciso-review): Spawn parallel agents representing different perspectives, then synthesize. `boardroom` and `ciso-review` run multiple rounds into shareable deliverables (`.md` + `.html` + `.pdf`); `council` is the lightweight variant — parallel subagents produce independent first opinions, then anonymized peer review and chairman synthesis happen inline, delivered as an inline answer. These skills declare `Agent` in `allowed-tools` and inherit the session model (no `model:` pin).
 
-**Structured elicitation** (explore-with-me, init-discovery): Interview the user with focused questions before generating anything. The methodology files in `references/` define the interviewing approach. The key discipline is *not* generating analysis upfront — ask first, generate after.
+**Structured elicitation** (explore-with-me, init-discovery, learn-with-me): Interview the user with focused questions before generating anything. The methodology files in `references/` define the interviewing approach. The key discipline is *not* generating analysis upfront — ask first, generate after. `learn-with-me` runs the direction in reverse (Claude holds the knowledge, the user builds understanding via Feynman-style teach-back), but shares the discipline: the user producing, not Claude generating. These skills set `disable-model-invocation: true` where auto-triggering a multi-round loop on a casual question would be obnoxious.
 
 **Iterative analysis** (create-spec, map-the-repo): Deep codebase exploration followed by document generation with pressure-test loops. `map-the-repo` uses a Python script for static analysis; `create-spec` works purely through Claude's tools.
 
